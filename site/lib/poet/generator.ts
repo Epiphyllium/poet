@@ -75,7 +75,16 @@ export async function generatePoem(topic: string, apiKey: string | undefined, mo
         event('model.request', '发送模型请求', { model });
         const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
           method: 'POST', headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json', 'X-Title': 'Five Character Poet' },
-          body: JSON.stringify({ model, messages, tools: [tool], tool_choice: { type: 'function', function: { name: 'submit_poem' } }, parallel_tool_calls: false, temperature: 0.8, max_tokens: 900 }),
+          body: JSON.stringify({
+            model,
+            messages,
+            tools: [tool],
+            tool_choice: { type: 'function', function: { name: 'submit_poem' } },
+            parallel_tool_calls: false,
+            temperature: 0.8,
+            max_tokens: 1200,
+            reasoning: { enabled: false },
+          }),
         });
         if (!response.ok) throw new Error(`OpenRouter ${response.status}`);
         const result = await response.json() as { choices?: Array<{ finish_reason?: string; message?: Record<string, unknown> }>; usage?: Usage };
@@ -105,7 +114,9 @@ export async function generatePoem(topic: string, apiKey: string | undefined, mo
 
   if (!poem) { poem = fallbackPoem(topic); source = 'fallback'; event('fallback.selected', '采用本地兜底', { title: poem.title }); }
   const finalValidation = validatePoem(poem);
-  if (!finalValidation.ok) throw new Error('最终诗稿未通过硬校验');
+  if (!finalValidation.ok) {
+    throw new Error(`最终诗稿未通过硬校验：${finalValidation.errors.map((error) => error.message).join('；')}`);
+  }
   event('run.finish', '生成结束', { source });
   return { id, topic, model, started_at: new Date().toISOString(), status: 'completed', source,
     duration_ms: Math.round((performance.now() - started) * 10) / 10,

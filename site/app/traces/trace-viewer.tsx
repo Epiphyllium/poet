@@ -1,6 +1,5 @@
 'use client';
 
-import Link from 'next/link';
 import { useCallback, useEffect, useState } from 'react';
 
 type Trace = Record<string, any>;
@@ -12,13 +11,23 @@ export default function TraceViewer() {
   const [traces, setTraces] = useState<Trace[]>([]);
   const [selectedId, setSelectedId] = useState('');
   const [trace, setTrace] = useState<Trace | null>(null);
+  const [loadError, setLoadError] = useState('');
 
   const load = useCallback(async () => {
-    const payload = await (await fetch('/api/traces', { cache: 'no-store' })).json();
-    const next = payload.traces || [];
-    setTraces((current) => JSON.stringify(current) === JSON.stringify(next) ? current : next);
-    const hash = location.hash.slice(1);
-    setSelectedId((current) => current || (hash && next.some((item: Trace) => item.id === hash) ? hash : next[0]?.id || ''));
+    try {
+      const response = await fetch('/api/traces', { cache: 'no-store' });
+      if (!response.ok || !(response.headers.get('content-type') || '').includes('application/json')) {
+        throw new Error('行迹服务暂时不可用');
+      }
+      const payload = await response.json();
+      const next = payload.traces || [];
+      setTraces((current) => JSON.stringify(current) === JSON.stringify(next) ? current : next);
+      const hash = location.hash.slice(1);
+      setSelectedId((current) => current || (hash && next.some((item: Trace) => item.id === hash) ? hash : next[0]?.id || ''));
+      setLoadError('');
+    } catch (error) {
+      setLoadError(error instanceof Error ? error.message : '行迹加载失败');
+    }
   }, []);
 
   useEffect(() => {
@@ -30,9 +39,16 @@ export default function TraceViewer() {
   useEffect(() => {
     if (!selectedId) return;
     history.replaceState(null, '', `/traces#${selectedId}`);
-    fetch(`/api/traces/${selectedId}`, { cache: 'no-store' }).then((response) => response.json()).then((next) => {
-      setTrace((current) => JSON.stringify(current) === JSON.stringify(next) ? current : next);
-    });
+    fetch(`/api/traces/${selectedId}`, { cache: 'no-store' })
+      .then(async (response) => {
+        if (!response.ok || !(response.headers.get('content-type') || '').includes('application/json')) throw new Error('行迹详情暂时不可用');
+        return response.json();
+      })
+      .then((next) => {
+        setTrace((current) => JSON.stringify(current) === JSON.stringify(next) ? current : next);
+        setLoadError('');
+      })
+      .catch((error) => setLoadError(error instanceof Error ? error.message : '行迹详情加载失败'));
   }, [selectedId, traces]);
 
   const select = (id: string) => { setSelectedId(id); setTrace(null); };
@@ -61,7 +77,7 @@ export default function TraceViewer() {
           </div>
         </aside>
         <article className="trace-scroll">
-          {!trace ? <div className="trace-empty"><div className="empty-seal">迹</div><h2>尚无行迹</h2><p>前往试诗页生成一首诗，再回来查看模型请求、工具校验和耗时。</p><Link href="/">前往试诗</Link></div> : <TraceDetail trace={trace} />}
+          {!trace ? <div className="trace-empty"><div className="empty-seal">迹</div><h2>{loadError || '尚无行迹'}</h2><p>{loadError ? '请稍后刷新；生成记录不会因此丢失。' : '前往试诗页生成一首诗，再回来查看模型请求、工具校验和耗时。'}</p><a href="/">前往试诗</a></div> : <TraceDetail trace={trace} />}
         </article>
       </section>
     </>

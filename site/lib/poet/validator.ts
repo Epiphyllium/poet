@@ -18,7 +18,9 @@ export function validatePoem(value: unknown): ValidationResult {
     if ([...line].length !== 5) errors.push({ code: 'line_length', message: `第${index + 1}句必须恰好五个汉字`, line_index: index });
     if (!HAN.test(line)) errors.push({ code: 'line_chars', message: `第${index + 1}句只能包含汉字`, line_index: index });
   });
-  const finals = poem.lines.length === 4 && poem.lines.every(Boolean) ? poem.lines.map((line) => finalOf([...line].at(-1) || '')) : [];
+  const finals = poem.lines.length === 4 && poem.lines.every(Boolean)
+    ? poem.lines.map((line) => finalOf([...line].at(-1) || ''))
+    : [];
   if (finals.length === 4) {
     if (finals.some((value) => !value)) errors.push({ code: 'rhyme_unknown', message: '无法取得韵脚', line_index: null });
     else {

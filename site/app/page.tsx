@@ -1,6 +1,5 @@
 'use client';
 
-import Link from 'next/link';
 import { FormEvent, useRef, useState } from 'react';
 
 type Poem = { title: string; lines: string[] };
@@ -28,6 +27,10 @@ export default function Home() {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ topic: value }),
       });
+      const contentType = response.headers.get('content-type') || '';
+      if (!contentType.includes('application/json')) {
+        throw new Error(response.ok ? '服务返回了无法识别的内容' : '生成服务暂时不可用，请稍后重试');
+      }
       const payload = await response.json();
       if (!response.ok) throw new Error(payload.error || '生成请求失败');
       setPoem(payload.poem);
@@ -51,7 +54,6 @@ export default function Home() {
         <img src="/mountain.svg" alt="淡墨山石与枯枝" />
         <div className="hero-copy">
           <h1 id="page-title">以一念<br />成四句</h1>
-          <p>模型写意，本地守律。形式正确是底线，文学表达是优化目标。</p>
         </div>
         <div className={`hero-status ${working ? 'working' : ''}`} aria-live="polite">
           <span className="seal-dot" /><span>{status}</span>
@@ -82,7 +84,7 @@ export default function Home() {
           <article className="poem-sheet" ref={resultRef} aria-live="polite">
             <div className="poem-meta">
               <span>{source === 'model' ? '模型诗作 · 工具校验通过' : '本地诗库 · 确定性兜底'}</span>
-              {traceId && <Link href={`/traces#${traceId}`}>查看本次行迹</Link>}
+              {traceId && <a href={`/traces#${traceId}`}>查看本次行迹</a>}
             </div>
             <div className="poem-stage">
               <h2>{poem.title}</h2>
@@ -103,13 +105,13 @@ export default function Home() {
 export function Header({ active }: { active: 'write' | 'traces' }) {
   return (
     <header className="site-header">
-      <Link className="brand" href="/" aria-label="五言试验台首页">
+      <a className="brand" href="/" aria-label="五言试验台首页">
         <span className="brand-mark" aria-hidden="true">詩</span>
         <span className="brand-name">五言试验台</span>
-      </Link>
+      </a>
       <nav className="site-nav" aria-label="主导航">
-        <Link className={active === 'write' ? 'active' : ''} href="/">试诗</Link>
-        <Link className={active === 'traces' ? 'active' : ''} href="/traces">运行行迹</Link>
+        <a className={active === 'write' ? 'active' : ''} href="/">试诗</a>
+        <a className={active === 'traces' ? 'active' : ''} href="/traces">运行行迹</a>
       </nav>
     </header>
   );
