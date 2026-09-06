@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="五言古诗生成系统的运行 Trace、Token 与耗时">
+  <title>五言 · 运行行迹</title>
+  <link rel="stylesheet" href="/assets/styles.css">
+</head>
+<body>
+  <main class="paper-shell trace-shell">
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="五言试验台首页">
+        <span class="brand-mark" aria-hidden="true">詩</span>
+        <span class="brand-name">五言试验台</span>
+      </a>
+      <nav class="site-nav" aria-label="主导航">
+        <a href="/">试诗</a>
+        <a class="active" href="/traces">运行行迹</a>
+      </nav>
+    </header>
+
+    <section class="trace-heading">
+      <div>
+        <h1>运行行迹</h1>
+        <p>从一次念头，到一首通过校验的诗。这里保留每一笔修改。</p>
+      </div>
+      <button class="refresh-button" id="refresh-traces" type="button">刷新记录</button>
+    </section>
+
+    <section class="metric-ruler" aria-label="当前运行指标">
+      <div><span>总耗时</span><strong id="metric-duration">—</strong></div>
+      <div><span>输入 Token</span><strong id="metric-prompt">—</strong></div>
+      <div><span>输出 Token</span><strong id="metric-completion">—</strong></div>
+      <div><span>估算成本</span><strong id="metric-cost">—</strong></div>
+    </section>
+
+    <section class="trace-workspace">
+      <aside class="run-index" aria-label="生成记录">
+        <div class="run-index-title">
+          <h2>近百次生成</h2>
+          <span id="run-count">0</span>
+        </div>
+        <div id="run-list" class="run-list">
+          <p class="empty-copy">生成一首诗后，行迹会留在这里。</p>
+        </div>
+      </aside>
+
+      <article class="trace-scroll" id="trace-detail">
+        <div class="trace-empty">
+          <span class="empty-seal">迹</span>
+          <h2>尚无行迹</h2>
+          <p>前往试诗页生成一首诗，再回来查看模型请求、工具校验和耗时。</p>
+          <a href="/">前往试诗</a>
+        </div>
+      </article>
+    </section>
+  </main>
+  <script src="/assets/traces.js" defer></script>
+</body>
+</html>

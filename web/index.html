@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="五言古诗生成与约束校验试验台">
+  <title>五言 · 试诗</title>
+  <link rel="stylesheet" href="/assets/styles.css">
+</head>
+
+<body>
+  <main class="paper-shell">
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="五言试验台首页">
+        <span class="brand-mark" aria-hidden="true">詩</span>
+        <span class="brand-name">五言试验台</span>
+      </a>
+      <nav class="site-nav" aria-label="主导航">
+        <a class="active" href="/">试诗</a>
+        <a href="/traces">运行行迹</a>
+      </nav>
+    </header>
+
+    <section class="ink-hero" aria-labelledby="page-title">
+      <img src="/assets/mountain.svg" alt="淡墨山石与枯枝">
+      <div class="hero-copy">
+        <h1 id="page-title">以一念<br>成四句</h1>
+        <p>模型写意，本地守律。</p>
+      </div>
+      <div class="hero-status" id="hero-status" aria-live="polite">
+        <span class="seal-dot"></span>
+        <span>静候题意</span>
+      </div>
+    </section>
+
+    <section class="workbench" aria-label="诗歌生成工作台">
+      <form class="topic-panel" id="poem-form">
+        <label for="topic">写下此刻想见的景象</label>
+        <textarea id="topic" name="topic" rows="5" maxlength="200" placeholder="例如：猫猫侦探、火星归航、雨夜最后一班地铁"
+          required></textarea>
+        <div class="topic-suggestions" aria-label="主题示例">
+          <button type="button" data-topic="月色">月色</button>
+          <button type="button" data-topic="猫猫侦探">猫猫侦探</button>
+          <button type="button" data-topic="AI时代的孤独">AI时代的孤独</button>
+        </div>
+        <div class="form-foot">
+          <p id="form-message">第一、二、四句同韵，第三句转韵。</p>
+          <button class="write-button" type="submit">
+            <span>开始写诗</span>
+            <span class="button-seal" aria-hidden="true">作</span>
+          </button>
+        </div>
+      </form>
+
+      <article class="poem-sheet" id="poem-sheet" aria-live="polite" hidden>
+        <div class="poem-meta">
+          <span id="poem-source">尚无生成记录</span>
+          <a id="trace-link" href="/traces" hidden>查看本次行迹</a>
+        </div>
+        <div class="poem-stage">
+          <h2 id="poem-title">待生成</h2>
+          <div class="poem-lines" id="poem-lines">
+            <p>· · · · ·</p>
+            <p>· · · · ·</p>
+            <p>· · · · ·</p>
+            <p>· · · · ·</p>
+          </div>
+        </div>
+        <div class="rhyme-note" id="rhyme-note">韵脚将在校验通过后标记</div>
+      </article>
+    </section>
+  </main>
+  <script src="/assets/app.js" defer></script>
+</body>
+
+</html>

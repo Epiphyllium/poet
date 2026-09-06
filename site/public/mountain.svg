@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 360" role="img" aria-labelledby="title desc">
+  <title id="title">淡墨山石</title>
+  <desc id="desc">层叠山石与一株向右伸展的枯枝</desc>
+  <defs>
+    <filter id="soft"><feGaussianBlur stdDeviation="8"/></filter>
+    <linearGradient id="fade" x1="0" x2="1"><stop stop-color="#60685f" stop-opacity=".08"/><stop offset="1" stop-color="#2d332e" stop-opacity=".35"/></linearGradient>
+  </defs>
+  <path d="M0 322C154 284 197 236 308 224c101-10 116 41 208 17 87-23 124-150 234-155 100-5 105 102 190 119 84 17 141-65 260-42v197H0z" fill="url(#fade)" filter="url(#soft)"/>
+  <g fill="none" stroke="#353b36" stroke-opacity=".42" stroke-width="3">
+    <path d="M409 286c59-64 102-104 156-168 29-34 66-46 92-17 18 20 27 61 54 72 38 15 51-16 79-13 37 5 52 48 92 53"/>
+    <path d="M572 118c-11 70-30 121-70 171M652 104c-12 48-4 91 29 131M782 164c-22 35-31 73-30 113" stroke-width="1.5"/>
+    <path d="M925 180c-7-55 13-101 58-137m-55 96-55-48m79 14 56-48m-46 15 4-50m-84 76-11-54m70 126 74-30m-24 10 29 35" stroke-width="2"/>
+  </g>
+  <path d="M0 325c262-22 445-8 620-14 211-7 341-34 580-21" fill="none" stroke="#343a35" stroke-opacity=".26"/>
+</svg>

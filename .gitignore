@@ -1,0 +1,20 @@
+# Local secrets
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.hypothesis/
+.venv/
+*.egg-info/
+
+# Local verification only
+tests/
+scripts/evaluate.py
+
+# Local artifacts
+tmp/
+output/

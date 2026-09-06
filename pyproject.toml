@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "five-character-poet"
+version = "0.1.0"
+description = "A constraint-safe five-character Chinese poem generator"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "pypinyin>=0.55,<1",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8,<10",
+    "hypothesis>=6,<7",
+]
+
+[project.scripts]
+poet = "poet.__main__:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+poet = ["data/*.json"]
+
+[tool.pytest.ini_options]
+addopts = "-q"
+testpaths = ["tests"]
